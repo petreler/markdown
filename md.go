@@ -53,19 +53,27 @@ func (md *MarkDown)WriteCode(contents string,language string) {
 
 func (md *MarkDown)WriteForm(contents [][]string) {
 
+	if len(contents) == 1 {
+		var param []string
+		param = append(param,"")
+		param = append(param,"")
+		param = append(param,"")
+		contents = append(contents,param)
+	}
 	for index,list := range contents {
-		md.content += "\r\n| "
+		md.content += "\r\n|"
 		c := ""
 		for _,content := range list {
 			c += content
 			c += " |"
 		}
 		if len(c) == 0 {
-			md.content += " |"
+			md.content += "\r\n|"
 		} else {
 			md.content += c
 		}
 		if index == 0 {
+			md.content += "\r\n|"
 			c = ""
 			for _ , _ = range list {
 				c += " ---------- |"
@@ -77,6 +85,8 @@ func (md *MarkDown)WriteForm(contents [][]string) {
 			}
 		}
 	}
+	md.content += "\r\n"
+
 }
 
 func (md *MarkDown)Save() {
@@ -91,11 +101,11 @@ func (md *MarkDown)Save() {
 
 ` + md.content
 	utils.WriteToFile(md.path + "/" + md.name + ".md",data)
-	fmt.Println("写入：" + md.path + "/" + md.name + ".md")
+	//fmt.Println("写入：" + md.path + "/" + md.name + ".md")
 
 	GOPATH := os.Getenv("GOPATH")
 	//ok,out := execCommand("./","pandoc","-s","-f markdown","-t html5","--toc","--css=../css/markdownPad-github.css","./" + md.name + ".md","-o ./" + md.name + ".html","-B ../css/header.html")
-	ok,out := execCommand("./","pandoc","-s","-f","markdown","-t","html","--toc","--css=" + GOPATH + "/src/github.com/NiuStar/server2/markdown/css/markdownPad-github.css",md.path + "/" + md.name + ".md","-o" +  md.name + ".html","-B",GOPATH + "/src/github.com/NiuStar/server2/markdown/css/header.html")
+	ok,out := execCommand("./","pandoc","-s","-f","markdown","-t","html","--toc","--css=" + GOPATH + "/src/github.com/NiuStar/NiuServer/markdown/css/markdownPad-github.css",md.path + "/" + md.name + ".md","-o" +  md.name + ".html","-B",GOPATH + "/src/github.com/NiuStar/NiuServer/markdown/css/header.html")
 	//f, err := exec.Command("title", "123456").Output()
 	if !ok {
 		fmt.Println("出错了")
@@ -110,8 +120,8 @@ func (md *MarkDown)Save() {
 	data = strings.Replace(data,"code span.bu { }","code span.bu { color: rgb(34, 17, 153) }",-1)
 	data = strings.Replace(data,"code span.st { color: #4070a0;","code span.st { color: rgb(170, 17, 17);",-1)
 
-	fmt.Println("data:data:",data)
-	WriteWithFileWrite(md.path + "/" + md.name + "_api.html",data)
+	//fmt.Println("data:data:",data)
+	utils.WriteToFile(md.path + "/" + md.name + ".html",data)
 	//fmt.Println("data:data:",data)
 
 	//code span.kw { color: #007020;
