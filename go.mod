@@ -3,4 +3,5 @@ module github.com/NiuStar/markdown
 go 1.12
 
 require (
-	github.com/NiuStar/utils
+	github.com/NiuStar/utils latest
+)
