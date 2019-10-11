@@ -1,4 +1,4 @@
-module github.com/NiuStar/markdown
+module github.com/petreler/markdown
 
 go 1.12
 
